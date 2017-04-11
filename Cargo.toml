@@ -1,0 +1,15 @@
+[package]
+name = "towers"
+version = "1.0.0"
+authors = ["cdouven <christian.douven@zalando.de>"]
+
+[lib]
+name = "towerslib"
+path = "src/lib.rs"
+
+[[bin]]
+name = "towers"
+path = "src/bin.rs"
+
+[dependencies]
+clap = "2"
