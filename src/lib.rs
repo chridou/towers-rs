@@ -12,6 +12,9 @@ impl Disk {
     }
 }
 
+
+
+
 pub struct Peg {
     disks: Vec<Disk>,
 }
@@ -31,21 +34,13 @@ impl Peg {
     }
 
     pub fn put(&mut self, disk: Disk) -> Result<(), String> {
-        match self.disks.pop() {
-            Some(top_disk) => {
-                if disk < top_disk {
-                    self.disks.push(top_disk);
-                    self.disks.push(disk);
-                    Ok(())
-                } else {
-                    self.disks.push(top_disk);
-                    Err(format!("Disk is too big: {:?}", disk))
-                }
-            }
-            None => {
-                self.disks.push(disk);
-                Ok(())
-            }
+        let may_add = self.disks.last().map(|top_disk| top_disk > &disk).unwrap_or(true);
+
+        if may_add {
+            self.disks.push(disk);
+            Ok(())
+        } else {
+            Err(format!("Disk is too big: {:?}", disk))
         }
     }
 
@@ -59,10 +54,6 @@ impl Peg {
 
     pub fn disks(&self) -> usize {
         self.disks.len()
-    }
-
-    pub fn contains_smallest(&self) -> bool {
-        self.disks.iter().any(|d| d.size() == 1)
     }
 
     pub fn peek(&self) -> Option<&Disk> {
