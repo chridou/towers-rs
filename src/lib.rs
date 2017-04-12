@@ -12,9 +12,6 @@ impl Disk {
     }
 }
 
-
-
-
 pub struct Peg {
     disks: Vec<Disk>,
 }
