@@ -1,5 +1,6 @@
 extern crate clap;
 extern crate towerslib;
+extern crate libc;
 
 use clap::{App, Arg};
 use towerslib::*;
@@ -41,4 +42,11 @@ fn main() {
     for (i, action) in session.iter().enumerate().skip(skip).take(take) {
         println!("{}: {:?}", i, action);
     }
+
+    unsafe {je_stats_print (write_cb, std::ptr::null(), std::ptr::null())};
+
 }
+
+extern {fn je_stats_print (write_cb: extern fn (*const libc::c_void, *const libc::c_char), cbopaque: *const libc::c_void, opts: *const libc::c_char);}
+extern fn write_cb (_: *const libc::c_void, message: *const libc::c_char) {
+    print! ("{}", String::from_utf8_lossy (unsafe {std::ffi::CStr::from_ptr (message as *const i8) .to_bytes()}));}
